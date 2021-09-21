@@ -1,0 +1,32 @@
+require("dotenv").config();
+
+const exprees = require("express");
+const morgan = require("morgan");
+const cors = require("cors");
+const xss = require("xss-clean");
+const helmet = require("helmet");
+const compression = require("compression");
+const bodyParser = require("body-parser");
+const routeNavigation = require("./routes");
+
+const app = exprees();
+const port = 3001;
+
+app.use(morgan("dev"));
+app.use(cors());
+app.options("*", cors());
+app.use(xss());
+app.use(helmet());
+app.use(compression());
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+
+app.use("/", routeNavigation);
+app.use("/*", (request, response) => {
+  response.status(404).send("Path Not Found !");
+});
+
+app.listen(port, () => {
+  // eslint-disable-next-line no-console
+  console.log(`Express app is listen on port ${port} !`);
+});
