@@ -7,7 +7,18 @@ module.exports = {
       let { page, limit } = request.query;
       page = Number(page);
       limit = Number(limit);
-      // TAMBAHKAN PROSES PEMBERIAN NILAI DEFAULT Value
+      if (page) {
+        // eslint-disable-next-line no-self-assign
+        page = page;
+      } else {
+        page = 1;
+      }
+      if (limit) {
+        // eslint-disable-next-line no-self-assign
+        limit = limit;
+      } else {
+        limit = 3;
+      }
       const offset = page * limit - limit;
       const totalData = await movieModel.getCountMovie();
       const totalPage = Math.ceil(totalData / limit);
