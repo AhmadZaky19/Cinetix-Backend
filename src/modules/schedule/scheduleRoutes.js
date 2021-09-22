@@ -1,13 +1,13 @@
-// const express = require("express");
+const express = require("express");
 
-// const Router = express.Router();
+const Router = express.Router();
 
-// const scheduleController = require("./scheduleController");
+const scheduleController = require("./scheduleController");
 
-// Router.get("/", movieController.getAllMovie);
-// Router.get("/:id", movieController.getMovieById);
-// Router.post("/", movieController.postMovie);
-// Router.patch("/:id", movieController.updateMovie);
-// Router.delete("/:id", movieController.deleteMovie);
+// Router.get("/", scheduleController.getAllSchedule);
+Router.get("/:id", scheduleController.getScheduleById);
+Router.post("/", scheduleController.postSchedule);
+Router.patch("/:id", scheduleController.updateSchedule);
+Router.delete("/:id", scheduleController.deleteSchedule);
 
-// module.exports = Router;
+module.exports = Router;
