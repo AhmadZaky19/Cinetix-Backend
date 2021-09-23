@@ -4,13 +4,12 @@ const helperWrapper = require("../../helpers/wrapper");
 module.exports = {
   getAllMovie: async (request, response) => {
     try {
-      let { search, page, limit } = request.query;
-      page = Number(page);
-      limit = Number(limit);
-
-      page = page || 1;
-      limit = limit || 3;
+      let { search, sort, order, page, limit } = request.query;
+      page = Number(page) || 1;
+      limit = Number(limit) || 4;
       search = search || "";
+      sort = sort || "id";
+      order = order || "asc";
       const offset = page * limit - limit;
       const totalData = await movieModel.getCountMovie();
       const totalPage = Math.ceil(totalData / limit);
@@ -20,7 +19,13 @@ module.exports = {
         limit,
         totalData,
       };
-      const result = await movieModel.getAllMovie(search, limit, offset);
+      const result = await movieModel.getAllMovie(
+        search,
+        sort,
+        order,
+        limit,
+        offset
+      );
       return helperWrapper.response(
         response,
         200,
