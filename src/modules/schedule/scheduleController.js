@@ -4,10 +4,13 @@ const helperWrapper = require("../../helpers/wrapper");
 module.exports = {
   getAllSchedule: async (request, response) => {
     try {
-      let { page, limit } = request.query;
-      page = Number(page);
-      limit = Number(limit);
-      // TAMBAHKAN PROSES PEMBERIAN NILAI DEFAULT Value
+      let { field, search, sort, order, page, limit } = request.query;
+      page = Number(page) || 1;
+      limit = Number(limit) || 3;
+      field = field || "movieId";
+      search = search || "";
+      sort = sort || "price";
+      order = order || "asc";
       const offset = page * limit - limit;
       const totalData = await scheduleModel.getCountSchedule();
       const totalPage = Math.ceil(totalData / limit);
@@ -17,7 +20,14 @@ module.exports = {
         limit,
         totalData,
       };
-      const result = await scheduleModel.getAllSchedule(limit, offset);
+      const result = await scheduleModel.getAllSchedule(
+        field,
+        search,
+        sort,
+        order,
+        limit,
+        offset
+      );
       return helperWrapper.response(
         response,
         200,

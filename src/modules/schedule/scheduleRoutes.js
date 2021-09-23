@@ -4,7 +4,7 @@ const Router = express.Router();
 
 const scheduleController = require("./scheduleController");
 
-// Router.get("/", scheduleController.getAllSchedule);
+Router.get("/", scheduleController.getAllSchedule);
 Router.get("/:id", scheduleController.getScheduleById);
 Router.post("/", scheduleController.postSchedule);
 Router.patch("/:id", scheduleController.updateSchedule);

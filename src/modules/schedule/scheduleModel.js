@@ -1,14 +1,18 @@
 const connection = require("../../config/mysql");
 
 module.exports = {
-  getAllSchedule: (limit, offset) =>
+  getAllSchedule: (field, search, sort, order, limit, offset) =>
     new Promise((resolve, reject) => {
       connection.query(
-        "SELECT * FROM schedule LIMIT ? OFFSET ?",
-        [limit, offset],
+        `SELECT * FROM schedule WHERE ${field} LIKE ? ORDER BY ${sort} ${order} LIMIT ? OFFSET ?`,
+        [`%${search}%`, limit, offset],
         (error, result) => {
           if (!error) {
-            resolve(result);
+            if (result.length < 1) {
+              reject(new Error("Data not found"));
+            } else {
+              resolve(result);
+            }
           } else {
             reject(new Error(`SQL: ${error.sqlMassage}`));
           }
