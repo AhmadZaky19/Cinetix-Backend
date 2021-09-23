@@ -4,21 +4,13 @@ const helperWrapper = require("../../helpers/wrapper");
 module.exports = {
   getAllMovie: async (request, response) => {
     try {
-      let { page, limit } = request.query;
+      let { search, page, limit } = request.query;
       page = Number(page);
       limit = Number(limit);
-      if (page) {
-        // eslint-disable-next-line no-self-assign
-        page = page;
-      } else {
-        page = 1;
-      }
-      if (limit) {
-        // eslint-disable-next-line no-self-assign
-        limit = limit;
-      } else {
-        limit = 3;
-      }
+
+      page = page || 1;
+      limit = limit || 3;
+      search = search || "";
       const offset = page * limit - limit;
       const totalData = await movieModel.getCountMovie();
       const totalPage = Math.ceil(totalData / limit);
@@ -28,7 +20,7 @@ module.exports = {
         limit,
         totalData,
       };
-      const result = await movieModel.getAllMovie(limit, offset);
+      const result = await movieModel.getAllMovie(search, limit, offset);
       return helperWrapper.response(
         response,
         200,
@@ -135,6 +127,11 @@ module.exports = {
         synopsis,
         updatedAt: new Date(Date.now()),
       };
+      for (const data in setData) {
+        if (!setData[data]) {
+          delete setData[data];
+        }
+      }
       const result = await movieModel.updateMovie(setData, id);
       return helperWrapper.response(res, 200, "Success update data", result);
     } catch (error) {
