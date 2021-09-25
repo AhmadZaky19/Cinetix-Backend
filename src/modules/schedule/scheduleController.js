@@ -28,6 +28,9 @@ module.exports = {
         limit,
         offset
       );
+      if (result.length < 1) {
+        return helperWrapper.response(response, 404, "Data not found", null);
+      }
       return helperWrapper.response(
         response,
         200,
@@ -82,7 +85,7 @@ module.exports = {
         time,
       };
       const result = await scheduleModel.postSchedule(setData);
-      return helperWrapper.response(res, 200, "Success get data", result);
+      return helperWrapper.response(res, 200, "Success post data", result);
     } catch (error) {
       return helperWrapper.response(
         res,

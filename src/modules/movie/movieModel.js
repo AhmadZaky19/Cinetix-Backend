@@ -8,11 +8,7 @@ module.exports = {
         [`%${search}%`, limit, offset],
         (error, result) => {
           if (!error) {
-            if (result.length < 1) {
-              reject(new Error("Data not found"));
-            } else {
-              resolve(result);
-            }
+            resolve(result);
           } else {
             reject(new Error(`SQL: ${error.sqlMassage}`));
           }

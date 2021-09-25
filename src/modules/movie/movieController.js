@@ -26,6 +26,9 @@ module.exports = {
         limit,
         offset
       );
+      if (result.length < 1) {
+        return helperWrapper.response(response, 404, "Data not found", null);
+      }
       return helperWrapper.response(
         response,
         200,
