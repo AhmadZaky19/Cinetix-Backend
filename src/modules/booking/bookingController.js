@@ -4,15 +4,15 @@ const helperWrapper = require("../../helpers/wrapper");
 module.exports = {
   getBookingByIdBooking: async (req, res) => {
     try {
-      const { idBooking } = req.params;
+      const { id } = req.params;
       // eslint-disable-next-line no-console
-      console.log(idBooking);
-      const result = await bookingModel.getBookingByIdBooking(idBooking);
+      console.log(id);
+      const result = await bookingModel.getBookingByIdBooking(id);
       if (result.length < 1) {
         return helperWrapper.response(
           res,
           404,
-          `Data by idBooking ${idBooking} not found !`,
+          `Data by Id Booking ${id} not found !`,
           null
         );
       }
@@ -99,6 +99,7 @@ module.exports = {
       };
       let result = await bookingModel.postBooking(setData);
       seat.forEach(async (item) => {
+        // eslint-disable-next-line no-console
         console.log(item);
         const setDataSeat = {
           bookingId: result.id,

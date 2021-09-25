@@ -1,18 +1,14 @@
 const connection = require("../../config/mysql");
 
 module.exports = {
-  getBookingByIdBooking: (idBooking) =>
+  getBookingByIdBooking: (id) =>
     new Promise((resolve, reject) => {
       connection.query(
-        "SELECT b.id, b.userId, b.dateBooking, b.timeBooking, b.movieId, b.scheduleId, b.totalTicket, b.totalPayment, b.paymentMethod, b.statusPayment, sb.seat FROM booking AS b JOIN seatbooking AS sb ON b.id = sb.bookingId WHERE b.Id ?",
-        idBooking,
+        "SELECT b.id, b.userId, b.dateBooking, b.timeBooking, b.movieId, b.scheduleId, b.totalTicket, b.totalPayment, b.paymentMethod, b.statusPayment, sb.seat FROM booking AS b JOIN seatbooking AS sb ON b.id = sb.bookingId WHERE b.Id = ?",
+        id,
         (error, result) => {
           if (!error) {
-            if (result.length < 1) {
-              reject(new Error("Data not found"));
-            } else {
-              resolve(result);
-            }
+            resolve(result);
           } else {
             reject(new Error(`SQL: ${error.sqlMassage}`));
           }
@@ -46,6 +42,7 @@ module.exports = {
           }
         }
       );
+      // eslint-disable-next-line no-console
       console.log(query.sql);
     }),
   postBooking: (data) =>
