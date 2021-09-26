@@ -28,14 +28,21 @@ module.exports = {
         limit,
         offset
       );
-      if (result.length < 1) {
+      const newResult = result.map((item) => {
+        const data = {
+          ...item,
+          time: item.time.split(","),
+        };
+        return data;
+      });
+      if (newResult.length < 1) {
         return helperWrapper.response(response, 404, "Data not found", null);
       }
       return helperWrapper.response(
         response,
         200,
         "Success get data",
-        result,
+        newResult,
         pageInfo
       );
     } catch (error) {
@@ -85,7 +92,14 @@ module.exports = {
         time,
       };
       const result = await scheduleModel.postSchedule(setData);
-      return helperWrapper.response(res, 200, "Success post data", result);
+      const newResult = result.map((item) => {
+        const data = {
+          ...item,
+          time: item.time.split(","),
+        };
+        return data;
+      });
+      return helperWrapper.response(res, 200, "Success post data", newResult);
     } catch (error) {
       return helperWrapper.response(
         res,
@@ -119,11 +133,16 @@ module.exports = {
         time,
         updatedAt: new Date(Date.now()),
       };
-      for (const data in setData) {
+      // for (const data in setData) {
+      //   if (!setData[data]) {
+      //     delete setData[data];
+      //   }
+      // }
+      Object.keys(setData).forEach((data) => {
         if (!setData[data]) {
           delete setData[data];
         }
-      }
+      });
       const result = await scheduleModel.updateSchedule(setData, id);
       return helperWrapper.response(res, 200, "Success update data", result);
     } catch (error) {

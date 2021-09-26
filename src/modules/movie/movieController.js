@@ -135,11 +135,11 @@ module.exports = {
         synopsis,
         updatedAt: new Date(Date.now()),
       };
-      for (const data in setData) {
+      Object.keys(setData).forEach((data) => {
         if (!setData[data]) {
           delete setData[data];
         }
-      }
+      });
       const result = await movieModel.updateMovie(setData, id);
       return helperWrapper.response(res, 200, "Success update data", result);
     } catch (error) {
