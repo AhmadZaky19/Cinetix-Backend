@@ -14,6 +14,9 @@ module.exports = {
       const offset = page * limit - limit;
       const totalData = await scheduleModel.getCountSchedule();
       const totalPage = Math.ceil(totalData / limit);
+      if (page > totalPage) {
+        return helperWrapper.response(response, 400, "Halaman tidak ada", null);
+      }
       const pageInfo = {
         page,
         totalPage,

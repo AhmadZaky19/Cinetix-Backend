@@ -6,13 +6,16 @@ module.exports = {
     try {
       let { search, sort, order, page, limit } = request.query;
       page = Number(page) || 1;
-      limit = Number(limit) || 4;
+      limit = Number(limit) || 3;
       search = search || "";
       sort = sort || "id";
       order = order || "asc";
       const offset = page * limit - limit;
       const totalData = await movieModel.getCountMovie();
       const totalPage = Math.ceil(totalData / limit);
+      if (page > totalPage) {
+        return helperWrapper.response(response, 400, "Halaman tidak ada", null);
+      }
       const pageInfo = {
         page,
         totalPage,
