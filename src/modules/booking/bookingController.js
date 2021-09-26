@@ -8,6 +8,24 @@ module.exports = {
       // eslint-disable-next-line no-console
       console.log(id);
       const result = await bookingModel.getBookingByIdBooking(id);
+
+      const dataSeat = [];
+      result.forEach((item) => {
+        const data = item.seat;
+        dataSeat.push(data);
+        return data;
+      });
+
+      const loopBookingData = result.map((value) => {
+        const data = value;
+        return data;
+      });
+      const bookingData = loopBookingData[0];
+
+      const newResult = {
+        ...bookingData,
+        seat: dataSeat,
+      };
       if (result.length < 1) {
         return helperWrapper.response(
           res,
@@ -16,7 +34,7 @@ module.exports = {
           null
         );
       }
-      return helperWrapper.response(res, 200, "Success get data", result);
+      return helperWrapper.response(res, 200, "Success get data", newResult);
     } catch (error) {
       return helperWrapper.response(
         res,
@@ -32,6 +50,24 @@ module.exports = {
       // eslint-disable-next-line no-console
       console.log(id);
       const result = await bookingModel.getBookingByIdUser(id);
+
+      const dataSeat = [];
+      result.forEach((item) => {
+        const data = item.seat;
+        dataSeat.push(data);
+        return data;
+      });
+
+      const loppBookingData = result.map((value) => {
+        const data = value;
+        return data;
+      });
+      const bookingData = loppBookingData[0];
+
+      const newResult = {
+        ...bookingData,
+        seat: dataSeat,
+      };
       if (result.length < 1) {
         return helperWrapper.response(
           res,
@@ -40,7 +76,7 @@ module.exports = {
           null
         );
       }
-      return helperWrapper.response(res, 200, "Success get data", result);
+      return helperWrapper.response(res, 200, "Success get data", newResult);
     } catch (error) {
       return helperWrapper.response(
         res,

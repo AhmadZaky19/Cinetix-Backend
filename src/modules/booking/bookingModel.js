@@ -17,17 +17,17 @@ module.exports = {
     }),
   getBookingByIdUser: (id) =>
     new Promise((resolve, reject) => {
-      connection.query("", id, (error, result) => {
-        if (!error) {
-          if (result.length < 1) {
-            reject(new Error("Data not found"));
-          } else {
+      connection.query(
+        "SELECT b.id, b.userId, b.dateBooking, b.timeBooking, b.movieId, b.scheduleId, b.totalTicket, b.totalPayment, b.paymentMethod, b.statusPayment, sb.seat FROM booking AS b JOIN seatbooking AS sb ON b.id = sb.bookingId WHERE b.userId = ?",
+        id,
+        (error, result) => {
+          if (!error) {
             resolve(result);
+          } else {
+            reject(new Error(`SQL: ${error.sqlMassage}`));
           }
-        } else {
-          reject(new Error(`SQL: ${error.sqlMassage}`));
         }
-      });
+      );
     }),
   getSeatBooking: (schedule, movie, date, time) =>
     new Promise((resolve, reject) => {
