@@ -60,8 +60,6 @@ module.exports = {
   getScheduleById: async (req, res) => {
     try {
       const { id } = req.params;
-      // eslint-disable-next-line no-console
-      console.log(id);
       const result = await scheduleModel.getScheduleById(id);
       if (result.length < 1) {
         return helperWrapper.response(

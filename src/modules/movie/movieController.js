@@ -51,8 +51,6 @@ module.exports = {
   getMovieById: async (req, res) => {
     try {
       const { id } = req.params;
-      // eslint-disable-next-line no-console
-      console.log(id);
       const result = await movieModel.getMovieById(id);
       if (result.length < 1) {
         return helperWrapper.response(

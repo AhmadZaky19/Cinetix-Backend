@@ -45,23 +45,17 @@ module.exports = {
     }),
   postSchedule: (data) =>
     new Promise((resolve, reject) => {
-      const query = connection.query(
-        "INSERT INTO schedule SET ?",
-        data,
-        (error, result) => {
-          if (!error) {
-            const newResult = {
-              id: result.insertId,
-              ...data,
-            };
-            resolve(newResult);
-          } else {
-            reject(new Error(`SQL : ${error.sqlMessage}`));
-          }
+      connection.query("INSERT INTO schedule SET ?", data, (error, result) => {
+        if (!error) {
+          const newResult = {
+            id: result.insertId,
+            ...data,
+          };
+          resolve(newResult);
+        } else {
+          reject(new Error(`SQL : ${error.sqlMessage}`));
         }
-      );
-      // eslint-disable-next-line no-console
-      console.log(query.sql);
+      });
     }),
   updateSchedule: (data, id) =>
     new Promise((resolve, reject) => {

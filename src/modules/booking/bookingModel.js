@@ -31,7 +31,7 @@ module.exports = {
     }),
   getSeatBooking: (schedule, movie, date, time) =>
     new Promise((resolve, reject) => {
-      const query = connection.query(
+      connection.query(
         "SELECT id, seat FROM seatbooking WHERE scheduleId = ? AND movieId = ? AND dateBooking = ? AND timeBooking = ?",
         [schedule, movie, date, time],
         (error, result) => {
@@ -42,32 +42,24 @@ module.exports = {
           }
         }
       );
-      // eslint-disable-next-line no-console
-      console.log(query.sql);
     }),
   postBooking: (data) =>
     new Promise((resolve, reject) => {
-      const query = connection.query(
-        "INSERT INTO booking SET ?",
-        data,
-        (error, result) => {
-          if (!error) {
-            const newResult = {
-              id: result.insertId,
-              ...data,
-            };
-            resolve(newResult);
-          } else {
-            reject(new Error(`SQL : ${error.sqlMessage}`));
-          }
+      connection.query("INSERT INTO booking SET ?", data, (error, result) => {
+        if (!error) {
+          const newResult = {
+            id: result.insertId,
+            ...data,
+          };
+          resolve(newResult);
+        } else {
+          reject(new Error(`SQL : ${error.sqlMessage}`));
         }
-      );
-      // eslint-disable-next-line no-console
-      console.log(query.sql);
+      });
     }),
   postSeatBooking: (data) =>
     new Promise((resolve, reject) => {
-      const query = connection.query(
+      connection.query(
         "INSERT INTO seatBooking SET ?",
         data,
         (error, result) => {
@@ -82,7 +74,5 @@ module.exports = {
           }
         }
       );
-      // eslint-disable-next-line no-console
-      console.log(query.sql);
     }),
 };

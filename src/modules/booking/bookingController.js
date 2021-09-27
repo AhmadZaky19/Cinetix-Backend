@@ -5,8 +5,6 @@ module.exports = {
   getBookingByIdBooking: async (req, res) => {
     try {
       const { id } = req.params;
-      // eslint-disable-next-line no-console
-      console.log(id);
       const result = await bookingModel.getBookingByIdBooking(id);
 
       const dataSeat = [];
@@ -47,8 +45,6 @@ module.exports = {
   getBookingByIdUser: async (req, res) => {
     try {
       const { id } = req.params;
-      // eslint-disable-next-line no-console
-      console.log(id);
       const result = await bookingModel.getBookingByIdUser(id);
 
       const dataSeat = [];
@@ -134,8 +130,6 @@ module.exports = {
       };
       let result = await bookingModel.postBooking(setData);
       seat.forEach(async (item) => {
-        // eslint-disable-next-line no-console
-        console.log(item);
         const setDataSeat = {
           bookingId: result.id,
           movieId,
