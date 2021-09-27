@@ -11,7 +11,7 @@ module.exports = {
       sort = sort || "id";
       order = order || "asc";
       const offset = page * limit - limit;
-      const totalData = await movieModel.getCountMovie();
+      const totalData = await movieModel.getCountMovie(search);
       const totalPage = Math.ceil(totalData / limit);
       if (page > totalPage) {
         return helperWrapper.response(response, 400, "Page not found", null);

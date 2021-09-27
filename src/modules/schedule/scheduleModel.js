@@ -29,10 +29,11 @@ module.exports = {
         }
       );
     }),
-  getCountSchedule: () =>
+  getCountSchedule: (field, search) =>
     new Promise((resolve, reject) => {
       connection.query(
-        "SELECT COUNT (*) AS total FROM schedule",
+        `SELECT COUNT (*) AS total FROM schedule WHERE ${field} LIKE ?`,
+        [`%${search}%`],
         (error, result) => {
           if (!error) {
             resolve(result[0].total);
