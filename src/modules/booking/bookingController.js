@@ -131,7 +131,6 @@ module.exports = {
         totalPayment,
         paymentMethod,
         statusPayment,
-        // seat,
       };
       let result = await bookingModel.postBooking(setData);
       seat.forEach(async (item) => {

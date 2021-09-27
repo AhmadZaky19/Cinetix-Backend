@@ -14,7 +14,7 @@ module.exports = {
       const totalData = await movieModel.getCountMovie();
       const totalPage = Math.ceil(totalData / limit);
       if (page > totalPage) {
-        return helperWrapper.response(response, 400, "Halaman tidak ada", null);
+        return helperWrapper.response(response, 400, "Page not found", null);
       }
       const pageInfo = {
         page,
