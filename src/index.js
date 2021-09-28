@@ -1,6 +1,6 @@
 require("dotenv").config();
 
-const exprees = require("express");
+const express = require("express");
 const morgan = require("morgan");
 const cors = require("cors");
 const xss = require("xss-clean");
@@ -9,7 +9,7 @@ const compression = require("compression");
 const bodyParser = require("body-parser");
 const routeNavigation = require("./routes");
 
-const app = exprees();
+const app = express();
 const port = 3001;
 
 app.use(morgan("dev"));
