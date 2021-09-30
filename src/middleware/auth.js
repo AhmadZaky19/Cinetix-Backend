@@ -28,6 +28,7 @@ module.exports = {
     });
     // eslint-disable-next-line no-console
     console.log("Authentication process");
+    // next();
   },
   authorization: (req, res, next) => {
     if (req.decodeToken.role !== "admin") {
