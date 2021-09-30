@@ -13,6 +13,10 @@ module.exports = {
   plugins: ["prettier"],
   rules: {
     "prettier/prettier": ["error", { endOfLine: "auto" }],
-    "prefer-destructuring": ["error", { object: true, array: false }],
+    "no-unused-expressions": "off", // memperbolehkan ternary operator
+    "consistent-return": "off", // memperbolehkan suatu fungsi tidak mengembalikan return
+    "prefer-destructuring": ["error", { object: true, array: false }], // memperbolehkan array tidak destructuring
+    "no-else-return": "off", // memperbolehkan penggunaan else didalam kondisi
+    "no-param-reassign": ["error", { props: false }], // memperbolehkan suatu object untuk dimanipulasi
   },
 };
