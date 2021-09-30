@@ -1,5 +1,7 @@
+const redis = require("../../config/redis");
 const movieModel = require("./movieModel");
 const helperWrapper = require("../../helpers/wrapper");
+const deleteFile = require("../../helpers/uploads/deleteFile");
 
 module.exports = {
   getAllMovie: async (request, response) => {
@@ -32,6 +34,13 @@ module.exports = {
       if (result.length < 1) {
         return helperWrapper.response(response, 404, "Data not found", null);
       }
+
+      redis.setex(
+        `getMovie:${JSON.stringify(request.query)}`,
+        3600,
+        JSON.stringify({ result, pageInfo })
+      );
+
       return helperWrapper.response(
         response,
         200,
@@ -60,7 +69,12 @@ module.exports = {
           null
         );
       }
-      return helperWrapper.response(res, 200, "Success get data", result);
+
+      // PROSES MENYIMPAN DATA KEDALAM REDIS
+      // ======
+      redis.setex(`getMovie:${id}`, 3600, JSON.stringify(result));
+      // ======
+      return helperWrapper.response(res, 200, "Success get data by id", result);
     } catch (error) {
       return helperWrapper.response(
         res,
@@ -91,6 +105,7 @@ module.exports = {
         durationHour,
         durationMinute,
         synopsis,
+        image: req.file ? req.file.filename : null,
       };
       const result = await movieModel.postMovie(setData);
       return helperWrapper.response(res, 200, "Success get data", result);
@@ -134,6 +149,7 @@ module.exports = {
         durationHour,
         durationMinute,
         synopsis,
+        image: req.file.filename,
         updatedAt: new Date(Date.now()),
       };
       Object.keys(setData).forEach((data) => {
@@ -164,6 +180,7 @@ module.exports = {
           null
         );
       }
+      deleteFile(`public/uploads/movie/${checkId[0].image}`);
       const result = await movieModel.deleteMovie(id);
       return helperWrapper.response(
         res,
