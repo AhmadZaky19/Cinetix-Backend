@@ -1,3 +1,4 @@
+const redis = require("../../config/redis");
 const scheduleModel = require("./scheduleModel");
 const helperWrapper = require("../../helpers/wrapper");
 
@@ -41,10 +42,17 @@ module.exports = {
       if (newResult.length < 1) {
         return helperWrapper.response(response, 404, "Data not found", null);
       }
+
+      redis.setex(
+        `getSchedule:${JSON.stringify(request.query)}`,
+        3600,
+        JSON.stringify({ result, pageInfo })
+      );
+
       return helperWrapper.response(
         response,
         200,
-        "Success get data",
+        "Success get schedule data",
         newResult,
         pageInfo
       );
@@ -61,6 +69,13 @@ module.exports = {
     try {
       const { id } = req.params;
       const result = await scheduleModel.getScheduleById(id);
+      const newResult = result.map((item) => {
+        const data = {
+          ...item,
+          time: item.time.split(","),
+        };
+        return data;
+      });
       if (result.length < 1) {
         return helperWrapper.response(
           res,
@@ -69,7 +84,15 @@ module.exports = {
           null
         );
       }
-      return helperWrapper.response(res, 200, "Success get data", result);
+
+      redis.setex(`getSchedule:${id}`, 3600, JSON.stringify(newResult));
+
+      return helperWrapper.response(
+        res,
+        200,
+        "Success get schedule data",
+        newResult
+      );
     } catch (error) {
       return helperWrapper.response(
         res,
@@ -93,14 +116,12 @@ module.exports = {
         time,
       };
       const result = await scheduleModel.postSchedule(setData);
-      const newResult = result.map((item) => {
-        const data = {
-          ...item,
-          time: item.time.split(","),
-        };
-        return data;
-      });
-      return helperWrapper.response(res, 200, "Success post data", newResult);
+      return helperWrapper.response(
+        res,
+        200,
+        "Success post schedule data",
+        result
+      );
     } catch (error) {
       return helperWrapper.response(
         res,
@@ -134,18 +155,18 @@ module.exports = {
         time,
         updatedAt: new Date(Date.now()),
       };
-      // for (const data in setData) {
-      //   if (!setData[data]) {
-      //     delete setData[data];
-      //   }
-      // }
       Object.keys(setData).forEach((data) => {
         if (!setData[data]) {
           delete setData[data];
         }
       });
       const result = await scheduleModel.updateSchedule(setData, id);
-      return helperWrapper.response(res, 200, "Success update data", result);
+      return helperWrapper.response(
+        res,
+        200,
+        "Success update schedule data",
+        result
+      );
     } catch (error) {
       return helperWrapper.response(
         res,
@@ -171,7 +192,7 @@ module.exports = {
       return helperWrapper.response(
         res,
         200,
-        `Success delete data by id ${id}`,
+        `Success delete schedule data by id ${id}`,
         result
       );
     } catch (error) {
