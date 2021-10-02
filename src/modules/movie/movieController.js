@@ -157,6 +157,7 @@ module.exports = {
           delete setData[data];
         }
       });
+      deleteFile(`public/uploads/movie/${checkId[0].image}`);
       const result = await movieModel.updateMovie(setData, id);
       return helperWrapper.response(res, 200, "Success update data", result);
     } catch (error) {
