@@ -4,7 +4,7 @@ const helperWrapper = require("../helpers/wrapper");
 
 const storage = multer.diskStorage({
   destination(req, file, cb) {
-    cb(null, "public/uploads/movie");
+    cb(null, "public/uploads/user");
   },
   filename(req, file, cb) {
     cb(null, new Date().toISOString().replace(/:/g, "-") + file.originalname);
@@ -14,7 +14,7 @@ const storage = multer.diskStorage({
 const upload = multer({
   storage,
   limits: {
-    fileSize: 1500,
+    fileSize: 1500000,
   },
   fileFilter: (req, file, cb) => {
     if (
