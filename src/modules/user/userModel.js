@@ -17,16 +17,57 @@ module.exports = {
     }),
   updateUser: (data, id) =>
     new Promise((resolve, reject) => {
-      connection.query("UPDATE user SET ?", [data, id], (error) => {
-        if (!error) {
-          const newResult = {
-            id,
-            ...data,
-          };
-          resolve(newResult);
-        } else {
-          reject(new Error(`SQL : ${error.sqlMessage}`));
+      connection.query(
+        "UPDATE user SET ? WHERE id = ?",
+        [data, id],
+        (error) => {
+          if (!error) {
+            const newResult = {
+              id,
+              ...data,
+            };
+            resolve(newResult);
+          } else {
+            reject(new Error(`SQL : ${error.sqlMessage}`));
+          }
         }
-      });
+      );
+      // console.log(sql);
+    }),
+  updatePassword: (newPassword, confirmPassword, id) =>
+    new Promise((resolve, reject) => {
+      connection.query(
+        "UPDATE user SET ? WHERE id = ?",
+        [newPassword, confirmPassword, id],
+        (error) => {
+          if (!error) {
+            const newResult = {
+              id,
+              password: newPassword,
+            };
+            resolve(newResult);
+          } else {
+            reject(new Error(`SQL : ${error.sqlMessage}`));
+          }
+        }
+      );
+    }),
+  updateImage: (data, id) =>
+    new Promise((resolve, reject) => {
+      connection.query(
+        "UPDATE user SET ? WHERE id = ?",
+        [data, id],
+        (error) => {
+          if (!error) {
+            const newResult = {
+              id,
+              ...data,
+            };
+            resolve(newResult);
+          } else {
+            reject(new Error(`SQL : ${error.sqlMessage}`));
+          }
+        }
+      );
     }),
 };
