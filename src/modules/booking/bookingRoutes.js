@@ -3,10 +3,23 @@ const express = require("express");
 const Router = express.Router();
 
 const bookingController = require("./bookingController");
+const middlewareAuth = require("../../middleware/auth");
 
-Router.get("/booking-id/:id", bookingController.getBookingByIdBooking);
-Router.get("/user-id/:id", bookingController.getBookingByIdUser);
-Router.get("/seatBooking", bookingController.getSeatBooking);
-Router.post("/", bookingController.postBooking);
+Router.get(
+  "/booking-id/:id",
+  middlewareAuth.authentication,
+  bookingController.getBookingByIdBooking
+);
+Router.get(
+  "/user-id/:id",
+  middlewareAuth.authentication,
+  bookingController.getBookingByIdUser
+);
+Router.get(
+  "/seatBooking",
+  middlewareAuth.authentication,
+  bookingController.getSeatBooking
+);
+Router.post("/", middlewareAuth.authentication, bookingController.postBooking);
 
 module.exports = Router;
