@@ -5,8 +5,8 @@ const deleteFile = (filePath) => {
   console.log("PROSES DELETE", filePath);
   // fs.existSync
   if (fs.existsSync(filePath)) {
-    // fs.unlinkSync
-    fs.unlinkSync(filePath, (error) => {
+    // fs.unlink
+    fs.unlink(filePath, (error) => {
       if (error) {
         return error.message("delete unsuccessful");
       }
