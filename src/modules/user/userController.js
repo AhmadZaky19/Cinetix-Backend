@@ -62,7 +62,6 @@ module.exports = {
           delete setData[data];
         }
       });
-      deleteFile(`public/uploads/user/${checkId[0].image}`);
       const result = await userModel.updateUser(setData, id);
       return helperWrapper.response(res, 200, "Success update user", result);
     } catch (error) {
@@ -129,7 +128,7 @@ module.exports = {
         image: req.file.filename,
         updatedAt: new Date(Date.now()),
       };
-
+      deleteFile(`public/uploads/user/${checkId[0].image}`);
       const result = await userModel.updateImage(setData, id);
       return helperWrapper.response(res, 200, "Success update image", result);
     } catch (error) {
