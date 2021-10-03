@@ -6,6 +6,12 @@ const userController = require("./userController");
 const middlewareAuth = require("../../middleware/auth");
 const middlewareUploadUser = require("../../middleware/uploadUser");
 
+Router.get(
+  "/dashboard",
+  middlewareAuth.authentication,
+  middlewareAuth.authorization,
+  userController.dashboard
+);
 Router.get("/:id", userController.getUserById);
 Router.patch("/", middlewareAuth.authentication, userController.updateUser);
 Router.patch(

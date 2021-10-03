@@ -88,7 +88,6 @@ module.exports = {
         );
       }
       const { newPassword, confirmPassword } = req.body;
-      console.log(newPassword);
       if (newPassword !== confirmPassword) {
         return helperWrapper.response(res, 400, "Password not match", null);
       }
@@ -99,7 +98,6 @@ module.exports = {
         password: hashedNewPassword,
         updatedAt: new Date(Date.now()),
       };
-      // console.log(setData);
       const result = await userModel.updatePassword(setData, id);
       return helperWrapper.response(
         res,
@@ -132,14 +130,31 @@ module.exports = {
         image: req.file.filename,
         updatedAt: new Date(Date.now()),
       };
-      // Object.keys(setData).forEach((data) => {
-      //   if (!setData[data]) {
-      //     delete setData[data];
-      //   }
-      // });
-      // console.log(setData);
+
       const result = await userModel.updateImage(setData, id);
       return helperWrapper.response(res, 200, "Success update image", result);
+    } catch (error) {
+      return helperWrapper.response(
+        res,
+        400,
+        `Bad request (${error.message})`,
+        null
+      );
+    }
+  },
+  dashboard: async (req, res) => {
+    try {
+      const { movieId, location, premiere } = req.query;
+      const result = await userModel.dashboard(movieId, location, premiere);
+      if (result.length < 1) {
+        return helperWrapper.response(res, 404, "Data not found", null);
+      }
+      return helperWrapper.response(
+        res,
+        200,
+        "Success get dashboard data",
+        result
+      );
     } catch (error) {
       return helperWrapper.response(
         res,
