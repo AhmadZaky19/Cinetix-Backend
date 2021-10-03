@@ -7,7 +7,7 @@ module.exports = {
     redis.get(`getMovie:${id}`, (error, result) => {
       if (!error && result !== null) {
         // eslint-disable-next-line no-console
-        console.log("Data ada di dalam redis");
+        console.log("Data is in redis");
         const newResult = JSON.parse(result);
         return helperWrapper.response(
           res,
@@ -17,7 +17,7 @@ module.exports = {
         );
       }
       // eslint-disable-next-line no-console
-      console.log("Data tidak ada di dalam redis");
+      console.log("No data in redis");
       next();
     });
   },
@@ -25,7 +25,7 @@ module.exports = {
     redis.get(`getMovie:${JSON.stringify(req.query)}`, (error, result) => {
       if (!error && result !== null) {
         // eslint-disable-next-line no-console
-        console.log("Data ada di dalam redis");
+        console.log("Data is in redis");
         const newResult = JSON.parse(result);
         return helperWrapper.response(
           res,
@@ -36,7 +36,7 @@ module.exports = {
         );
       }
       // eslint-disable-next-line no-console
-      console.log("Data tidak ada di dalam redis");
+      console.log("No data in redis");
       next();
     });
   },
@@ -55,7 +55,7 @@ module.exports = {
     redis.get(`getSchedule:${id}`, (error, result) => {
       if (!error && result !== null) {
         // eslint-disable-next-line no-console
-        console.log("Data ada di dalam redis");
+        console.log("Data is in redis");
         const newResult = JSON.parse(result);
         return helperWrapper.response(
           res,
@@ -65,7 +65,7 @@ module.exports = {
         );
       }
       // eslint-disable-next-line no-console
-      console.log("Data tidak ada di dalam redis");
+      console.log("No data in redis");
       next();
     });
   },
@@ -73,7 +73,7 @@ module.exports = {
     redis.get(`getSchedule:${JSON.stringify(req.query)}`, (error, result) => {
       if (!error && result !== null) {
         // eslint-disable-next-line no-console
-        console.log("Data ada di dalam redis");
+        console.log("Data is in redis");
         const newResult = JSON.parse(result);
         return helperWrapper.response(
           res,
@@ -84,7 +84,7 @@ module.exports = {
         );
       }
       // eslint-disable-next-line no-console
-      console.log("Data tidak ada di dalam redis");
+      console.log("No data in redis");
       next();
     });
   },
