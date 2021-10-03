@@ -21,5 +21,10 @@ Router.get(
   bookingController.getSeatBooking
 );
 Router.post("/", middlewareAuth.authentication, bookingController.postBooking);
+Router.patch(
+  "/use-ticket/:id",
+  middlewareAuth.authentication,
+  bookingController.updateTicketStatus
+);
 
 module.exports = Router;

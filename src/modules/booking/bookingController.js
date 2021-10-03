@@ -151,4 +151,33 @@ module.exports = {
       );
     }
   },
+  updateTicketStatus: async (req, res) => {
+    try {
+      const { id } = req.params;
+      const checkBooking = await bookingModel.detailBookingById(id);
+      if (checkBooking.length < 1) {
+        return helperWrapper.response(res, 404, "Booking data not found", null);
+      }
+
+      const changeStatus = "notActive";
+      const setData = {
+        ...checkBooking.statusUsed,
+        statusUsed: changeStatus,
+        updatedAt: new Date(Date.now()),
+      };
+      const result = await bookingModel.updateTicketStatus(setData, id);
+      if (checkBooking[0].statusUsed === "active") {
+        return helperWrapper.response(res, 200, "Using ticket success", result);
+      } else {
+        return helperWrapper.response(res, 400, "Ticket already been used");
+      }
+    } catch (error) {
+      return helperWrapper.response(
+        res,
+        400,
+        `Bad request (${error.message})`,
+        null
+      );
+    }
+  },
 };

@@ -4,7 +4,7 @@ module.exports = {
   getBookingByIdBooking: (id) =>
     new Promise((resolve, reject) => {
       connection.query(
-        "SELECT b.id, b.userId, b.dateBooking, b.timeBooking, b.movieId, b.scheduleId, b.totalTicket, b.totalPayment, b.paymentMethod, b.statusPayment, sb.seat FROM booking AS b JOIN seatbooking AS sb ON b.id = sb.bookingId WHERE b.Id = ?",
+        "SELECT b.id, b.userId, b.dateBooking, b.timeBooking, b.movieId, b.scheduleId, b.totalTicket, b.totalPayment, b.paymentMethod, b.statusPayment, b.statusUsed, sb.seat FROM booking AS b JOIN seatbooking AS sb ON b.id = sb.bookingId WHERE b.Id = ?",
         id,
         (error, result) => {
           if (!error) {
@@ -18,7 +18,7 @@ module.exports = {
   getBookingByIdUser: (id) =>
     new Promise((resolve, reject) => {
       connection.query(
-        "SELECT b.id, b.userId, b.dateBooking, b.timeBooking, b.movieId, b.scheduleId, b.totalTicket, b.totalPayment, b.paymentMethod, b.statusPayment, sb.seat FROM booking AS b JOIN seatbooking AS sb ON b.id = sb.bookingId WHERE b.userId = ?",
+        "SELECT b.id, b.userId, b.dateBooking, b.timeBooking, b.movieId, b.scheduleId, b.totalTicket, b.totalPayment, b.paymentMethod, b.statusPayment, b.statusUsed, sb.seat FROM booking AS b JOIN seatbooking AS sb ON b.id = sb.bookingId WHERE b.userId = ?",
         id,
         (error, result) => {
           if (!error) {
@@ -39,6 +39,20 @@ module.exports = {
             resolve(result);
           } else {
             reject(new Error(`SQL: ${error.sqlMassage}`));
+          }
+        }
+      );
+    }),
+  detailBookingById: (id) =>
+    new Promise((resolve, reject) => {
+      connection.query(
+        "SELECT * FROM booking WHERE id = ?",
+        id,
+        (error, results) => {
+          if (!error) {
+            resolve(results);
+          } else {
+            reject(new Error(`SQL : ${error.sqlMessage}`));
           }
         }
       );
@@ -67,6 +81,27 @@ module.exports = {
             const newResult = {
               id: result.insertId,
               ...data,
+            };
+            resolve(newResult);
+          } else {
+            reject(new Error(`SQL : ${error.sqlMessage}`));
+          }
+        }
+      );
+    }),
+  updateTicketStatus: (ticketStatus, id) =>
+    new Promise((resolve, reject) => {
+      connection.query(
+        "UPDATE booking SET ? WHERE id = ?",
+        [ticketStatus, id],
+        (error) => {
+          if (!error) {
+            const parseData = { ...ticketStatus };
+            const { statusUsed } = parseData;
+            const newResult = {
+              id,
+              statusUsed,
+              updatedAt: parseData.updatedAt,
             };
             resolve(newResult);
           } else {
