@@ -57,7 +57,6 @@ module.exports = {
         role,
         updatedAt: new Date(Date.now()),
       };
-      // console.log(setData);
       Object.keys(setData).forEach((data) => {
         if (!setData[data]) {
           delete setData[data];

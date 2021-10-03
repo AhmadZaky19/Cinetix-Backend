@@ -1,5 +1,4 @@
 const fs = require("fs");
-// const helperWrapper = require("../wrapper");
 
 const deleteFile = (filePath) => {
   // eslint-disable-next-line no-console

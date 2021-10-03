@@ -32,7 +32,6 @@ module.exports = {
           }
         }
       );
-      // console.log(sql);
     }),
   updatePassword: (newPassword, confirmPassword, id) =>
     new Promise((resolve, reject) => {
