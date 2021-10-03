@@ -82,14 +82,21 @@ To get a local copy up and running follow these simple example steps.
 For the reference, this is the package that used in this project:
 
 - `express` [[here](https://www.npmjs.com/package/express)]
+- `bcrypt` [[here](https://www.npmjs.com/package/bcrypt)]
 - `body-parser` [[here](https://www.npmjs.com/package/body-parser)]
+- `compression` [[here](https://www.npmjs.com/package/compression)]
 - `cors` [[here](https://www.npmjs.com/package/cors)]
+- `dotenv` [[here](https://www.npmjs.com/package/dotenv)]
 - `morgan` [[here](https://www.npmjs.com/package/morgan)]
 - `mysql2` [[here](https://www.npmjs.com/package/mysql2)]
 - `helmet` [[here](https://www.npmjs.com/package/helmet)]
 - `xss-clean` [[here](https://www.npmjs.com/package/xss-clean)]
 - `compression` [[here](https://www.npmjs.com/package/compression)]
 - `nodemon` [[here](https://www.npmjs.com/package/nodemon)]
+- `jsonwebtoken` [[here](https://www.npmjs.com/package/jsonwebtoken)]
+- `multer` [[here](https://www.npmjs.com/package/multer)]
+- `redis` [[here](https://www.npmjs.com/package/redis)]
+- `uuid` [[here](https://www.npmjs.com/package/uuid)]
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
