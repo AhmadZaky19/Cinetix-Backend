@@ -149,7 +149,7 @@ module.exports = {
         durationHour,
         durationMinute,
         synopsis,
-        image: req.file.filename,
+        image: req.file ? req.file.filename : null,
         updatedAt: new Date(Date.now()),
       };
       Object.keys(setData).forEach((data) => {

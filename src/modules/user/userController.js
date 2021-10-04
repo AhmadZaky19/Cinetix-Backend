@@ -125,7 +125,7 @@ module.exports = {
         );
       }
       const setData = {
-        image: req.file.filename,
+        image: req.file ? req.file.filename : null,
         updatedAt: new Date(Date.now()),
       };
       deleteFile(`public/uploads/user/${checkId[0].image}`);
