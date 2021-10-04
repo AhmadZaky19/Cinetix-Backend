@@ -71,6 +71,7 @@ To get a local copy up and running follow these simple example steps.
    DBPASSWORD = 'your database password (if any)'
    DATABASE = 'your database name'
    PORT = 'your localhost port'
+   SECRET_KEY = 'your secret key'
    ```
 
 <p align="right">(<a href="#top">back to top</a>)</p>
