@@ -18,7 +18,7 @@ module.exports = {
           "Your token is destroyed, please login again"
         );
       }
-      jwt.verify(token, "RAHASIA", (err, resultJwt) => {
+      jwt.verify(token, process.env.SECRET_KEY, (err, resultJwt) => {
         if (err) {
           return helperWrapper.response(res, 403, "Invalid signature");
         }
