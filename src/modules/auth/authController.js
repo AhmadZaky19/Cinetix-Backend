@@ -60,7 +60,7 @@ module.exports = {
       // PROSES UTAMA MEMBUAT TOKEN MENGGUNAKAN JWT (DATA YANG MAU DIUBAH, KATA KUNCI, LAMA TOKEN BISA DIGUNAKAN )
       const payload = checkUser[0];
       delete payload.password;
-      const token = jwt.sign({ ...payload }, "RAHASIA", {
+      const token = jwt.sign({ ...payload }, process.env.SECRET_KEY, {
         expiresIn: "24h",
       });
       return helperWrapper.response(res, 200, "Success login", {
