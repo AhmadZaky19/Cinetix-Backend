@@ -26,5 +26,11 @@ Router.patch(
   middlewareAuth.authentication,
   bookingController.updateTicketStatus
 );
+Router.get(
+  "/dashboard",
+  middlewareAuth.authentication,
+  middlewareAuth.authorization,
+  bookingController.dashboard
+);
 
 module.exports = Router;

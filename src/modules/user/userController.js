@@ -140,26 +140,4 @@ module.exports = {
       );
     }
   },
-  dashboard: async (req, res) => {
-    try {
-      const { movieId, location, premiere } = req.query;
-      const result = await userModel.dashboard(movieId, location, premiere);
-      if (result.length < 1) {
-        return helperWrapper.response(res, 404, "Data not found", null);
-      }
-      return helperWrapper.response(
-        res,
-        200,
-        "Success get dashboard data",
-        result
-      );
-    } catch (error) {
-      return helperWrapper.response(
-        res,
-        400,
-        `Bad request (${error.message})`,
-        null
-      );
-    }
-  },
 };

@@ -69,18 +69,4 @@ module.exports = {
         }
       );
     }),
-  dashboard: (movieId, location, premiere) =>
-    new Promise((resolve, reject) => {
-      connection.query(
-        "SELECT MONTH(b.createdAt) AS month, SUM(b.totalPayment) AS total FROM booking AS b JOIN schedule ON b.scheduleId=schedule.id WHERE b.movieId = ? AND schedule.location LIKE ? AND schedule.premiere LIKE ? AND YEAR(b.createdAt) = YEAR(NOW()) GROUP BY MONTH (b.createdAt)",
-        [movieId, `%${location}%`, `%${premiere}%`],
-        (error, result) => {
-          if (!error) {
-            resolve(result);
-          } else {
-            reject(new Error(`SQL : ${error.sqlMessage}`));
-          }
-        }
-      );
-    }),
 };
