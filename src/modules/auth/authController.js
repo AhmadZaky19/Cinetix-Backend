@@ -4,6 +4,7 @@ const bcrypt = require("bcrypt");
 const helperWrapper = require("../../helpers/wrapper");
 const authModel = require("./authModel");
 const redis = require("../../config/redis");
+const sendMail = require("../../helpers/email");
 
 module.exports = {
   register: async (req, res) => {
@@ -30,6 +31,22 @@ module.exports = {
         role: "user",
       };
 
+      const setDataMail = {
+        to: email,
+        subject: "Email Verification",
+        template: "email-verification",
+        data: {
+          firstName: "Ahmad Zaky",
+        },
+        // attachment: [
+        //   {
+        //     filename: "movie1.jpg",
+        //     path: "./public/uploads/movie/2021-10-03T20-16-12.191ZKny Mugen 1.jpg",
+        //   },
+        // ]
+      };
+
+      await sendMail(setDataMail);
       const result = await authModel.register(setData);
       return helperWrapper.response(res, 200, "Success register user", result);
     } catch (error) {
@@ -61,11 +78,16 @@ module.exports = {
       const payload = checkUser[0];
       delete payload.password;
       const token = jwt.sign({ ...payload }, process.env.SECRET_KEY, {
+        expiresIn: "3h",
+      });
+      // ADD REFRESH TOKEN
+      const refreshToken = jwt.sign({ ...payload }, process.env.SECRET_KEY, {
         expiresIn: "24h",
       });
       return helperWrapper.response(res, 200, "Success login", {
         id: payload.id,
         token,
+        refreshToken,
       });
     } catch (error) {
       return helperWrapper.response(
@@ -82,6 +104,46 @@ module.exports = {
       token = token.split(" ")[1];
       redis.setex(`accessToken:${token}`, 3600 * 24, token);
       return helperWrapper.response(res, 200, "Success logout", null);
+    } catch (error) {
+      return helperWrapper.response(
+        res,
+        400,
+        `Bad request (${error.message})`,
+        null
+      );
+    }
+  },
+  refreshToken: async (req, res) => {
+    try {
+      const { refreshToken } = req.body;
+      redis.get(`refreshToken:${refreshToken}`, (error, result) => {
+        if (!error && result !== null) {
+          return helperWrapper.response(
+            res,
+            403,
+            "Your refresh token can't be use"
+          );
+        }
+        jwt.verify(refreshToken, process.env.SECRET_KEY, (err, resultJwt) => {
+          if (err) {
+            return helperWrapper.response(res, 403, err.message);
+          }
+          delete resultJwt.iat;
+          delete resultJwt.exp;
+          const token = jwt.sign(resultJwt, process.env.SECRET_KEY, {
+            expiresIn: "3h",
+          });
+          const newRefreshToken = jwt.sign(resultJwt, process.env.SECRET_KEY, {
+            expiresIn: "24h",
+          });
+          redis.setex(`refreshToken:${refreshToken}`, 3600 * 24, refreshToken);
+          return helperWrapper.response(res, 200, "Success Refresh Token !", {
+            id: resultJwt.id,
+            token,
+            refreshToken: newRefreshToken,
+          });
+        });
+      });
     } catch (error) {
       return helperWrapper.response(
         res,
