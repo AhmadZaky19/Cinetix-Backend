@@ -128,7 +128,9 @@ module.exports = {
         image: req.file ? req.file.filename : null,
         updatedAt: new Date(Date.now()),
       };
-      deleteFile(`public/uploads/user/${checkId[0].image}`);
+      if (req.file && checkId[0].image) {
+        deleteFile(`public/uploads/movie/${checkId[0].image}`);
+      }
       const result = await userModel.updateImage(setData, id);
       return helperWrapper.response(res, 200, "Success update image", result);
     } catch (error) {
