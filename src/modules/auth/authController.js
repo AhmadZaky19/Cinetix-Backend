@@ -28,15 +28,20 @@ module.exports = {
         lastName,
         email,
         password: hashedPassword,
+        image: req.file ? req.file.filename : null,
         role: "user",
       };
 
+      const result = await authModel.register(setData);
+
       const setDataMail = {
-        to: email,
+        to: result.email,
         subject: "Email Verification",
         template: "email-verification",
         data: {
-          firstName: "Ahmad Zaky",
+          id: result.id,
+          firstName: result.firstName,
+          lastName: result.lastName,
         },
         // attachment: [
         //   {
@@ -47,13 +52,28 @@ module.exports = {
       };
 
       await sendMail(setDataMail);
-      const result = await authModel.register(setData);
+      // const result = await authModel.register(setData);
       return helperWrapper.response(res, 200, "Success register user", result);
     } catch (error) {
       return helperWrapper.response(
         res,
         400,
         `Bad request (${error.message})`,
+        null
+      );
+    }
+  },
+  verifyUser: async (req, res) => {
+    try {
+      const { id } = req.params;
+
+      await authModel.verifyUser("active", id);
+      return helperWrapper.response(res, 200, "Success activate email");
+    } catch (error) {
+      return helperWrapper.response(
+        res,
+        400,
+        `Bad Request (${error.message})`,
         null
       );
     }
@@ -72,6 +92,15 @@ module.exports = {
 
       if (!matchPassword) {
         return helperWrapper.response(res, 400, "Wrong password", null);
+      }
+
+      if (checkUser[0].status !== "active") {
+        return helperWrapper.response(
+          res,
+          400,
+          `Please verify email first`,
+          null
+        );
       }
 
       // PROSES UTAMA MEMBUAT TOKEN MENGGUNAKAN JWT (DATA YANG MAU DIUBAH, KATA KUNCI, LAMA TOKEN BISA DIGUNAKAN )

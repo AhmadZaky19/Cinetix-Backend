@@ -6,12 +6,12 @@ require("dotenv").config();
 const sendMail = (data) =>
   new Promise((resolve, reject) => {
     const transporter = nodemailer.createTransport({
-      host: "smtp.gmail.com",
-      port: "587",
+      host: process.env.HOST_SMTP,
+      port: process.env.PORT_SMTP,
       secure: false,
       auth: {
-        user: "az8630394@gmail.com",
-        pass: "12345ABCDE",
+        user: process.env.EMAIL_SMTP,
+        pass: process.env.PASS_SMTP,
       },
       tls: {
         rejectUnauthorized: false,
@@ -35,7 +35,6 @@ const sendMail = (data) =>
       from: '"Cinetix App" <az8630394@gmail.com>',
       to: data.to,
       subject: data.subject,
-      // html: "<b>Click Here to Activate</b>",
       template: data.template,
       context: data.data,
     };
