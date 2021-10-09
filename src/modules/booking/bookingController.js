@@ -1,5 +1,7 @@
+const moment = require("moment");
 const bookingModel = require("./bookingModel");
 const helperWrapper = require("../../helpers/wrapper");
+// const midtrans = require("../../helpers/midtrans");
 
 module.exports = {
   getBookingByIdBooking: async (req, res) => {
@@ -141,6 +143,10 @@ module.exports = {
         await bookingModel.postSeatBooking(setDataSeat);
       });
       result = { ...result, seat };
+      // const resultMidtrans = await midtrans.post(
+      //   result.id,
+      //   result.totalPayment
+      // );
       return helperWrapper.response(res, 200, "Success post data", result);
     } catch (error) {
       return helperWrapper.response(
@@ -184,6 +190,14 @@ module.exports = {
     try {
       const { movieId, location, premiere } = req.query;
       const result = await bookingModel.dashboard(movieId, location, premiere);
+      const newResult = [];
+      result.forEach((value) => {
+        const newDataResult = {
+          ...value,
+          month: moment().format("MMMM"),
+        };
+        newResult.push(newDataResult);
+      });
       if (result.length < 1) {
         return helperWrapper.response(res, 404, "Data not found", null);
       }
@@ -191,7 +205,7 @@ module.exports = {
         res,
         200,
         "Success get dashboard data",
-        result
+        newResult
       );
     } catch (error) {
       return helperWrapper.response(
@@ -202,4 +216,5 @@ module.exports = {
       );
     }
   },
+  // exportTicket: async (req, res) => {},
 };
