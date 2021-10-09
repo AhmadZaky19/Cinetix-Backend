@@ -79,7 +79,7 @@ module.exports = {
           res,
           200,
           "Success get data",
-          newResult.result,
+          newResult.newResult,
           newResult.pageInfo
         );
       }
