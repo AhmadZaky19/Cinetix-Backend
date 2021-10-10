@@ -1,11 +1,11 @@
 const connection = require("../../config/mysql");
 
 module.exports = {
-  getAllSchedule: (field, search, sort, order, limit, offset) =>
+  getAllSchedule: (location, movieId, sort, order, limit, offset) =>
     new Promise((resolve, reject) => {
       connection.query(
-        `SELECT * FROM schedule WHERE ${field} LIKE ? ORDER BY ${sort} ${order} LIMIT ? OFFSET ?`,
-        [`%${search}%`, limit, offset],
+        `SELECT * FROM schedule WHERE location LIKE '%${location}%' AND movieId LIKE '%${movieId}%' ORDER BY ${sort} ${order} LIMIT ? OFFSET ?`,
+        [limit, offset],
         (error, result) => {
           if (!error) {
             resolve(result);
@@ -29,11 +29,10 @@ module.exports = {
         }
       );
     }),
-  getCountSchedule: (field, search) =>
+  getCountSchedule: (location, movieId) =>
     new Promise((resolve, reject) => {
       connection.query(
-        `SELECT COUNT (*) AS total FROM schedule WHERE ${field} LIKE ?`,
-        [`%${search}%`],
+        `SELECT COUNT (*) AS total FROM schedule WHERE location LIKE '%${location}%' AND movieId LIKE '%${movieId}%'`,
         (error, result) => {
           if (!error) {
             resolve(result[0].total);

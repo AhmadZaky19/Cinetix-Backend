@@ -5,15 +5,15 @@ const helperWrapper = require("../../helpers/wrapper");
 module.exports = {
   getAllSchedule: async (request, response) => {
     try {
-      let { field, search, sort, order, page, limit } = request.query;
+      let { location, movieId, sort, order, page, limit } = request.query;
       page = Number(page) || 1;
       limit = Number(limit) || 3;
-      field = field || "movieId";
-      search = search || "";
+      location = location || "";
+      movieId = movieId || "";
       sort = sort || "price";
       order = order || "asc";
       const offset = page * limit - limit;
-      const totalData = await scheduleModel.getCountSchedule(field, search);
+      const totalData = await scheduleModel.getCountSchedule(location, movieId);
       const totalPage = Math.ceil(totalData / limit);
       if (page > totalPage) {
         return helperWrapper.response(response, 400, "Page not found", null);
@@ -25,8 +25,8 @@ module.exports = {
         totalData,
       };
       const result = await scheduleModel.getAllSchedule(
-        field,
-        search,
+        location,
+        movieId,
         sort,
         order,
         limit,
@@ -46,7 +46,7 @@ module.exports = {
       redis.setex(
         `getSchedule:${JSON.stringify(request.query)}`,
         3600,
-        JSON.stringify({ result, pageInfo })
+        JSON.stringify({ newResult, pageInfo })
       );
 
       return helperWrapper.response(
