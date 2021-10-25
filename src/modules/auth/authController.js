@@ -82,16 +82,16 @@ module.exports = {
     try {
       const { email, password } = req.body;
       const checkUser = await authModel.getUserByEmail(email);
+      if (checkUser.length < 1) {
+        return helperWrapper.response(res, 404, "Wrong email/password", null);
+      }
+
       const matchPassword = await bcrypt.compare(
         password,
         checkUser[0].password
       );
-      if (checkUser.length < 1) {
-        return helperWrapper.response(res, 404, "Email not registed", null);
-      }
-
       if (!matchPassword) {
-        return helperWrapper.response(res, 400, "Wrong password", null);
+        return helperWrapper.response(res, 400, "Wrong email/password", null);
       }
 
       if (checkUser[0].status !== "active") {
