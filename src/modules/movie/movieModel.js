@@ -1,10 +1,12 @@
 const connection = require("../../config/mysql");
 
 module.exports = {
-  getAllMovie: (search, sort, order, limit, offset) =>
+  getAllMovie: (month, search, sort, order, limit, offset) =>
     new Promise((resolve, reject) => {
-      connection.query(
-        `SELECT * FROM movie WHERE name LIKE ? ORDER BY ${sort} ${order} LIMIT ? OFFSET ?`,
+      const query = connection.query(
+        `SELECT * FROM movie WHERE ${
+          month ? `MONTH(releaseDate) = ${month} AND` : ""
+        }  name LIKE ? ORDER BY ${sort} ${order} LIMIT ? OFFSET ?`,
         [`%${search}%`, limit, offset],
         (error, result) => {
           if (!error) {
@@ -14,6 +16,7 @@ module.exports = {
           }
         }
       );
+      console.log(query.sql);
     }),
   getMovieById: (id) =>
     new Promise((resolve, reject) => {
@@ -29,10 +32,12 @@ module.exports = {
         }
       );
     }),
-  getCountMovie: (search) =>
+  getCountMovie: (month, search) =>
     new Promise((resolve, reject) => {
       connection.query(
-        "SELECT COUNT (*) AS total FROM movie WHERE name LIKE ?",
+        `SELECT COUNT (*) AS total FROM movie WHERE ${
+          month ? `MONTH(releaseDate) = ${month} AND` : ""
+        }  name LIKE ?`,
         [`%${search}%`],
         (error, result) => {
           if (!error) {
