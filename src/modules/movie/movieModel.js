@@ -3,7 +3,7 @@ const connection = require("../../config/mysql");
 module.exports = {
   getAllMovie: (month, search, sort, order, limit, offset) =>
     new Promise((resolve, reject) => {
-      const query = connection.query(
+      connection.query(
         `SELECT * FROM movie WHERE ${
           month ? `MONTH(releaseDate) = ${month} AND` : ""
         }  name LIKE ? ORDER BY ${sort} ${order} LIMIT ? OFFSET ?`,
@@ -16,7 +16,6 @@ module.exports = {
           }
         }
       );
-      console.log(query.sql);
     }),
   getMovieById: (id) =>
     new Promise((resolve, reject) => {
