@@ -10,8 +10,21 @@ module.exports = {
   register: async (req, res) => {
     try {
       const { firstName, lastName, email, password } = req.body;
-      // PROSES PENGECEKAN EMAIL SUDAH PERNAH TERDAFTAR ATAU BELUM DI DATABASE
       const checkUser = await authModel.getUserByEmail(email);
+      if (
+        firstName.length < 1 ||
+        lastName.length < 1 ||
+        email.length < 1 ||
+        password.length < 1
+      ) {
+        return helperWrapper.response(
+          res,
+          400,
+          "All input must be filled",
+          null
+        );
+      }
+      // PROSES PENGECEKAN EMAIL SUDAH PERNAH TERDAFTAR ATAU BELUM DI DATABASE
       if (checkUser.length > 0) {
         return helperWrapper.response(
           res,
@@ -43,16 +56,9 @@ module.exports = {
           firstName: result.firstName,
           lastName: result.lastName,
         },
-        // attachment: [
-        //   {
-        //     filename: "movie1.jpg",
-        //     path: "./public/uploads/movie/2021-10-03T20-16-12.191ZKny Mugen 1.jpg",
-        //   },
-        // ]
       };
 
       await sendMail(setDataMail);
-      // const result = await authModel.register(setData);
       return helperWrapper.response(res, 200, "Success register user", result);
     } catch (error) {
       return helperWrapper.response(
@@ -82,6 +88,14 @@ module.exports = {
     try {
       const { email, password } = req.body;
       const checkUser = await authModel.getUserByEmail(email);
+      if (email.length < 1 || password.length < 1) {
+        return helperWrapper.response(
+          res,
+          400,
+          "All input must be filled",
+          null
+        );
+      }
       if (checkUser.length < 1) {
         return helperWrapper.response(res, 404, "Wrong email/password", null);
       }
