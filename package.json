@@ -35,6 +35,7 @@
     "prettier": "^2.4.1"
   },
   "scripts": {
+    "dev": "npx nodemon src/index",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "zaky",
