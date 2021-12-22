@@ -15,9 +15,6 @@ module.exports = {
       const offset = page * limit - limit;
       const totalData = await scheduleModel.getCountSchedule(location, movieId);
       const totalPage = Math.ceil(totalData / limit);
-      if (page > totalPage) {
-        return helperWrapper.response(response, 400, "Page not found", null);
-      }
       const pageInfo = {
         page,
         totalPage,
@@ -40,7 +37,10 @@ module.exports = {
         return data;
       });
       if (newResult.length < 1) {
-        return helperWrapper.response(response, 404, "Data not found", null);
+        return helperWrapper.response(response, 200, "Data not found", []);
+      }
+      if (page > totalPage) {
+        return helperWrapper.response(response, 400, "Page not found", null);
       }
 
       redis.setex(
