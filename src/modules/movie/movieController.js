@@ -16,9 +16,6 @@ module.exports = {
       const offset = page * limit - limit;
       const totalData = await movieModel.getCountMovie(month, search);
       const totalPage = Math.ceil(totalData / limit);
-      if (page > totalPage) {
-        return helperWrapper.response(response, 400, "Page not found", null);
-      }
       const pageInfo = {
         page,
         totalPage,
@@ -34,7 +31,10 @@ module.exports = {
         offset
       );
       if (result.length < 1) {
-        return helperWrapper.response(response, 404, "Data not found", null);
+        return helperWrapper.response(response, 200, "Movie not found", result);
+      }
+      if (page > totalPage) {
+        return helperWrapper.response(response, 400, "Page not found", null);
       }
 
       redis.setex(
