@@ -18,7 +18,7 @@ module.exports = {
   getBookingByIdUser: (id) =>
     new Promise((resolve, reject) => {
       connection.query(
-        "SELECT b.id, b.userId, b.dateBooking, b.timeBooking, b.movieId, b.scheduleId, b.totalTicket, b.totalPayment, b.paymentMethod, b.statusPayment, b.statusUsed, sb.seat FROM booking AS b JOIN seatbooking AS sb ON b.id = sb.bookingId WHERE b.userId = ?",
+        "SELECT b.id, b.userId, b.dateBooking, b.timeBooking, b.movieId, b.scheduleId, b.totalTicket, b.totalPayment, b.paymentMethod, b.statusPayment, b.statusUsed, m.name, s.premiere FROM booking AS b JOIN movie as m on b.movieId = m.id JOIN schedule as s on b.scheduleId = s.id WHERE b.userId = ?",
         id,
         (error, result) => {
           if (!error) {
@@ -34,6 +34,20 @@ module.exports = {
       connection.query(
         "SELECT id, seat FROM seatbooking WHERE scheduleId = ? AND movieId = ? AND dateBooking = ? AND timeBooking = ?",
         [schedule, movie, date, time],
+        (error, result) => {
+          if (!error) {
+            resolve(result);
+          } else {
+            reject(new Error(`SQL: ${error.sqlMassage}`));
+          }
+        }
+      );
+    }),
+  getSeatBookingDetail: (id) =>
+    new Promise((resolve, reject) => {
+      connection.query(
+        "SELECT seat FROM seatbooking WHERE bookingId = ? ",
+        id,
         (error, result) => {
           if (!error) {
             resolve(result);

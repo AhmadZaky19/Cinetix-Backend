@@ -1,7 +1,9 @@
+/* eslint-disable no-await-in-loop */
+/* eslint-disable no-shadow */
+/* eslint-disable no-restricted-syntax */
 const moment = require("moment");
 const bookingModel = require("./bookingModel");
 const helperWrapper = require("../../helpers/wrapper");
-// const midtrans = require("../../helpers/midtrans");
 
 module.exports = {
   getBookingByIdBooking: async (req, res) => {
@@ -49,32 +51,12 @@ module.exports = {
       const { id } = req.params;
       const result = await bookingModel.getBookingByIdUser(id);
 
-      const dataSeat = [];
-      result.forEach((item) => {
-        const data = item.seat;
-        dataSeat.push(data);
-        return data;
-      });
-
-      const loppBookingData = result.map((value) => {
-        const data = value;
-        return data;
-      });
-      const bookingData = loppBookingData[0];
-
-      const newResult = {
-        ...bookingData,
-        seat: dataSeat,
-      };
-      if (result.length < 1) {
-        return helperWrapper.response(
-          res,
-          404,
-          `Data by id ${id} not found !`,
-          null
-        );
+      for (const item of result) {
+        let seatDetail = await bookingModel.getSeatBookingDetail(item.id);
+        seatDetail = seatDetail.map((item) => item.seat);
+        item.seat = seatDetail;
       }
-      return helperWrapper.response(res, 200, "Success get data", newResult);
+      return helperWrapper.response(res, 200, "Success get data", result);
     } catch (error) {
       return helperWrapper.response(
         res,
@@ -143,10 +125,6 @@ module.exports = {
         await bookingModel.postSeatBooking(setDataSeat);
       });
       result = { ...result, seat };
-      // const resultMidtrans = await midtrans.post(
-      //   result.id,
-      //   result.totalPayment
-      // );
       return helperWrapper.response(res, 200, "Success post data", result);
     } catch (error) {
       return helperWrapper.response(
@@ -216,5 +194,4 @@ module.exports = {
       );
     }
   },
-  // exportTicket: async (req, res) => {},
 };
