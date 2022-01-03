@@ -185,7 +185,7 @@ module.exports = {
           null
         );
       }
-      if (req.file && checkId[0].image) {
+      if (checkId[0].image) {
         deleteFile(`public/uploads/movie/${checkId[0].image}`);
       }
       const result = await movieModel.deleteMovie(id);
