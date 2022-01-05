@@ -1,7 +1,6 @@
 /* eslint-disable no-await-in-loop */
 /* eslint-disable no-shadow */
 /* eslint-disable no-restricted-syntax */
-const moment = require("moment");
 const bookingModel = require("./bookingModel");
 const helperWrapper = require("../../helpers/wrapper");
 
@@ -166,19 +165,26 @@ module.exports = {
   },
   dashboard: async (req, res) => {
     try {
-      const { movieId, location, premiere } = req.query;
+      let { movieId, location, premiere } = req.query;
+      movieId = movieId || "";
+      premiere = premiere || "";
+      location = location || "";
+
       const result = await bookingModel.dashboard(movieId, location, premiere);
-      const newResult = [];
-      result.forEach((value) => {
-        const newDataResult = {
-          ...value,
-          month: moment().format("MMMM"),
-        };
-        newResult.push(newDataResult);
-      });
+
       if (result.length < 1) {
-        return helperWrapper.response(res, 404, "Data not found", null);
+        return helperWrapper.response(res, 200, "Data not found", []);
       }
+
+      const newResult = result.map((item) => {
+        const data = {
+          ...item,
+          month: item.month.slice(0, 3),
+        };
+
+        return data;
+      });
+
       return helperWrapper.response(
         res,
         200,

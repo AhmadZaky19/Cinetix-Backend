@@ -127,8 +127,7 @@ module.exports = {
   dashboard: (movieId, location, premiere) =>
     new Promise((resolve, reject) => {
       connection.query(
-        "SELECT MONTH(b.createdAt) AS month, SUM(b.totalPayment) AS total FROM booking AS b JOIN schedule ON b.scheduleId=schedule.id WHERE b.movieId = ? AND schedule.location LIKE ? AND schedule.premiere LIKE ? AND YEAR(b.createdAt) = YEAR(NOW()) GROUP BY MONTH (b.createdAt)",
-        [movieId, `%${location}%`, `%${premiere}%`],
+        `SELECT MONTHNAME(b.createdAt) AS month, SUM(b.totalPayment) AS total FROM booking AS b JOIN schedule AS s ON b.movieId = s.movieId WHERE YEAR(b.createdAt) = YEAR(NOW()) AND b.movieId LIKE '%${movieId}%' AND s.premiere LIKE '%${premiere}%' AND s.location LIKE '%${location}%' GROUP BY MONTHNAME(b.createdAt)`,
         (error, result) => {
           if (!error) {
             resolve(result);
