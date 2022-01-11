@@ -37,7 +37,13 @@ module.exports = {
         return data;
       });
       if (newResult.length < 1) {
-        return helperWrapper.response(response, 200, "Data not found", []);
+        return helperWrapper.response(
+          response,
+          200,
+          "Data not found",
+          [],
+          pageInfo
+        );
       }
       if (page > totalPage) {
         return helperWrapper.response(response, 400, "Page not found", null);

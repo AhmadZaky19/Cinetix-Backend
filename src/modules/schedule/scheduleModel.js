@@ -4,7 +4,7 @@ module.exports = {
   getAllSchedule: (location, movieId, sort, order, limit, offset) =>
     new Promise((resolve, reject) => {
       connection.query(
-        `SELECT * FROM schedule WHERE location LIKE '%${location}%' AND movieId LIKE '%${movieId}%' ORDER BY ${sort} ${order} LIMIT ? OFFSET ?`,
+        `SELECT schedule.id, schedule.movieId, schedule.premiere, schedule.price, schedule.location, schedule.dateStart, schedule.dateEnd, schedule.time, schedule.createdAt, schedule.updatedAt, movie.image FROM schedule JOIN movie on schedule.movieId = movie.id WHERE location LIKE '%${location}%' AND movieId LIKE '%${movieId}%' ORDER BY ${sort} ${order} LIMIT ? OFFSET ?`,
         [limit, offset],
         (error, result) => {
           if (!error) {
